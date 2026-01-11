@@ -3,7 +3,6 @@ from flask_cors import CORS
 from yt_dlp import YoutubeDL
 from util import *
 import os
-from time import sleep
 
 app = Flask(__name__)
 CORS(app, expose_headers=['filename'])
