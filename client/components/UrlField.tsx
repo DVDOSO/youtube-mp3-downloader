@@ -1,9 +1,14 @@
 'use client'
 
-import { handleDownload } from "@/actions/download"
+import { handleDownload } from "@/actions/downloads"
 import { useState } from "react"
 
-const UrlField = () => {
+type UrlFieldProps = {
+    value?: string
+    onValueChange?: (v: string) => void
+}
+
+const UrlField = ({ onValueChange }: UrlFieldProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
@@ -37,9 +42,10 @@ const UrlField = () => {
             className="box-border w-150 h-8 p-1 ml-10 border-2"
             type="text"
             name={"name"}
-            onChange={() => {
+            onChange={(e) => {
                 setIsError(false)
                 setIsSuccess(false)
+                onValueChange?.((e.target as HTMLInputElement).value)
             }}
             />
             <button

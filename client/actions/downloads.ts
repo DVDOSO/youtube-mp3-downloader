@@ -1,0 +1,93 @@
+export const handleDownload = async (formData: FormData) => {
+    const url = formData.get('name')
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+    try{
+        const response = await fetch(`${apiUrl}/download`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: url }),
+        })
+
+        if(!response.ok) {
+            const text = await response.text().catch(() => null)
+            throw new Error(text || `HTTP ${response.status}`)
+        }
+
+        const filename = response.headers.get('X-Filename') || 'audio.mp3'
+
+        const blob = await response.blob()
+        const downloadURL = window.URL.createObjectURL(blob)
+
+        const link = document.createElement('a')
+        link.href = downloadURL
+        link.download = filename
+        document.body.appendChild(link)
+        link.click()
+        link.parentElement?.removeChild(link)
+        
+        window.URL.revokeObjectURL(downloadURL)
+
+        await fetch(`${apiUrl}/cleanup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        }).catch(() => {})
+    }
+    catch (error){
+        console.error(error)
+        await fetch(`${apiUrl}/cleanup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        }).catch(() => {})
+        throw new Error("Error occured during download process")
+    }
+}
+
+export const handleListDownload = async (urls: string[]) => {
+    // const stubbed_urls: string[] = ["https://www.youtube.com/watch?v=sA_p0rQtDXE", "https://www.youtube.com/watch?v=K4DyBUG242c", "https://www.youtube.com/watch?v=MoB-Iq3XrMg"]
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+    try{
+        const response = await fetch(`${apiUrl}/list-download`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ urls: urls }),
+        })
+
+        if(!response.ok) {
+            const text = await response.text().catch(() => null)
+            throw new Error(text || `HTTP ${response.status}`)
+        }
+
+        const filename = 'downloaded_playlist.zip'
+
+        const blob = await response.blob()
+        const downloadURL = window.URL.createObjectURL(blob)
+
+        const link = document.createElement('a')
+        link.href = downloadURL
+        link.download = filename
+        document.body.appendChild(link)
+        link.click()
+        link.parentElement?.removeChild(link)
+        
+        window.URL.revokeObjectURL(downloadURL)
+
+        await fetch(`${apiUrl}/cleanup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        }).catch(() => {})
+    }
+    catch (error){
+        console.error(error)
+        await fetch(`${apiUrl}/cleanup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        }).catch(() => {})
+        throw new Error("Error occured during download process")
+    }
+}

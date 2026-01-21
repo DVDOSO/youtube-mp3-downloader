@@ -84,4 +84,5 @@ venv/
 env/
 ENV/
 
-server/ffmpeg/
+/server/ffmpeg/
+/server/test.py
