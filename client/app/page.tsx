@@ -2,16 +2,15 @@
 
 import UrlField from "@/components/UrlField";
 import { useState } from "react";
-import { handleListDownload } from "@/actions/downloads";
 import { Button, Container, Typography } from "@mui/material";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import DownloadIcon from "@mui/icons-material/Download";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import DownloadAllButton from "@/components/DownloadAllButton";
 
 export default function Home() {
 	const [urls, setUrls] = useState<string[]>([""]);
@@ -32,11 +31,6 @@ export default function Home() {
 			copy.pop();
 			return copy;
 		});
-	};
-
-	const onDownloadAll = async () => {
-		const toSend = urls.map((s) => (s || "").trim()).filter(Boolean);
-		await handleListDownload(toSend);
 	};
 
 	return (
@@ -73,15 +67,7 @@ export default function Home() {
 						Remove URL
 					</Button>
 				</div>
-				<div className="mt-3">
-					<Button
-						variant="outlined"
-						endIcon={<DownloadIcon />}
-						size="large"
-						onClick={onDownloadAll}>
-						Download all
-					</Button>
-				</div>
+				<DownloadAllButton urls={urls} />
 			</Container>
 		</section>
 	);

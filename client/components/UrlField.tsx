@@ -25,6 +25,7 @@ const UrlField = ({ onValueChange }: UrlFieldProps) => {
 	const [isError, setIsError] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [value, setValue] = useState("");
+	const [errorMessage, setErrorMessage] = useState<string>("");
 
 	const submit = async (formData: FormData) => {
 		setIsLoading(true);
@@ -34,7 +35,11 @@ const UrlField = ({ onValueChange }: UrlFieldProps) => {
 			await handleDownload(formData);
 			setIsSuccess(true);
 		} catch (e) {
-			console.error(e);
+			if (e instanceof Error) {
+				setErrorMessage(e.message);
+			} else {
+				setErrorMessage("Error downloading, please try again.");
+			}
 			setIsError(true);
 		} finally {
 			setIsLoading(false);
@@ -139,8 +144,9 @@ const UrlField = ({ onValueChange }: UrlFieldProps) => {
 						return;
 					}
 					setIsError(false);
+					setErrorMessage("");
 				}}>
-				<Alert severity="error">Download failed</Alert>
+				<Alert severity="error">{errorMessage}</Alert>
 			</Snackbar>
 
 			<Snackbar
