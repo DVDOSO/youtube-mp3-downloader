@@ -11,9 +11,11 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import DownloadAllButton from "@/components/DownloadAllButton";
+import LoadingBar from "@/components/LoadingBar";
 
 export default function Home() {
 	const [urls, setUrls] = useState<string[]>([""]);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const setUrlAt = (index: number, val: string) => {
 		setUrls((prev) => {
@@ -67,7 +69,8 @@ export default function Home() {
 						Remove URL
 					</Button>
 				</div>
-				<DownloadAllButton urls={urls} />
+				<DownloadAllButton urls={urls} setIsSubmitting={setIsSubmitting} />
+				{isSubmitting && <LoadingBar total={urls.length} />}
 			</Container>
 		</section>
 	);

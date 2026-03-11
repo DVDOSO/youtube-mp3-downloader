@@ -10,6 +10,12 @@ app = Flask(__name__)
 CORS(app, expose_headers=['filename'])
 
 ydl_opts = {
+    'js_runtime': 'node',
+    'extractor_args': {
+        'youtube': {
+            'player_client': ['default', '-android_sdkless']
+        }
+    },
     'nocheckcertificate': True,
     'quiet': False,
     'format': 'bestaudio/best',

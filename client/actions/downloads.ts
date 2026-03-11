@@ -1,14 +1,24 @@
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const checkProgress = async (currentData: string[]) => {
-	const response = await fetch(`${apiUrl}/`, {
-		method: "GET",
-	});
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-	const data = await response.json();
+export const countProgress = async () => {
+	try {
+		const response = await fetch(`${apiUrl}/`, {
+			method: "GET",
+		});
+
+		let data: string[] = await response.json();
+		data = data.filter((item) => item.endsWith(".mp3"));
+
+		return data.length;
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 const cleanup = async () => {
+	await sleep(2000); // Hardcoded delay to ensure file is ready for download before cleanup
 	await fetch(`${apiUrl}/cleanup`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },

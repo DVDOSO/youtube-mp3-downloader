@@ -15,6 +15,7 @@ import { green, red } from "@mui/material/colors";
 
 interface DownloadAllButtonProps {
 	urls: string[];
+	setIsSubmitting: (val: boolean) => void;
 }
 
 const iconStyle = {
@@ -25,7 +26,10 @@ const iconStyle = {
 	justifyContent: "center",
 };
 
-const DownloadAllButton = ({ urls }: DownloadAllButtonProps) => {
+const DownloadAllButton = ({
+	urls,
+	setIsSubmitting,
+}: DownloadAllButtonProps) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
@@ -33,6 +37,7 @@ const DownloadAllButton = ({ urls }: DownloadAllButtonProps) => {
 
 	const onDownloadAll = async () => {
 		setIsLoading(true);
+		setIsSubmitting(true);
 		const toSend = urls.map((s) => (s || "").trim()).filter(Boolean);
 		try {
 			await handleListDownload(toSend);
@@ -46,6 +51,7 @@ const DownloadAllButton = ({ urls }: DownloadAllButtonProps) => {
 			setIsError(true);
 		}
 		setIsLoading(false);
+		setIsSubmitting(false);
 	};
 
 	return (
