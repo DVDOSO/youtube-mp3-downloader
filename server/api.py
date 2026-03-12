@@ -20,7 +20,7 @@ ydl_opts = {
     'quiet': False,
     'format': 'bestaudio/best',
     'outtmpl': 'downloads/%(title)s.%(ext)s',
-    'ffmpeg_location': './ffmpeg',
+    'ffmpeg_location': '/usr/bin/ffmpeg',
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
@@ -104,4 +104,4 @@ def handle_http_exception(e):
     return e.description, e.code
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
