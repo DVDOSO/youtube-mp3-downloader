@@ -1,0 +1,23 @@
+# Local Virtual Environment
+
+venv/
+
+# Python Cache
+
+**pycache**/
+\*.pyc
+
+# Local Downloads (Important!)
+
+downloads/
+
+# Local FFmpeg
+
+ffmpeg/
+
+# Docker/System files
+
+.dockerignore
+Dockerfile
+.git
+.vscode
