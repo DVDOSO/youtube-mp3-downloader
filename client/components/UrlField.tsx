@@ -21,11 +21,10 @@ type UrlFieldProps = {
 	onValueChange?: (v: string) => void;
 };
 
-const UrlField = ({ onValueChange }: UrlFieldProps) => {
+const UrlField = ({ value: propValue, onValueChange }: UrlFieldProps) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
-	const [value, setValue] = useState("");
 	const [errorMessage, setErrorMessage] = useState<string>("");
 
 	const submit = async (formData: FormData) => {
@@ -58,7 +57,7 @@ const UrlField = ({ onValueChange }: UrlFieldProps) => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const fd = new FormData();
-		fd.append("name", value);
+		fd.append("name", (propValue ?? "") as string);
 		await submit(fd);
 	};
 
@@ -66,12 +65,11 @@ const UrlField = ({ onValueChange }: UrlFieldProps) => {
 		<Box
 			component="form"
 			onSubmit={handleSubmit}
-			className="flex items-center ml-2 mt-1 mb-1">
+			className="flex items-center mt-1 mb-1">
 			<TextField
 				name="name"
-				value={value}
+				value={propValue ?? ""}
 				onChange={(e) => {
-					setValue(e.target.value);
 					setIsError(false);
 					setIsSuccess(false);
 					onValueChange?.(e.target.value);
@@ -79,13 +77,13 @@ const UrlField = ({ onValueChange }: UrlFieldProps) => {
 				variant="outlined"
 				size="small"
 				label="Enter YouTube URL"
-				sx={{ mr: 1, maxWidth: 550, width: "40vw" }}
+				sx={{ mr: 1, mt: 0.5, maxWidth: 550, width: "40vw" }}
 			/>
 			<IconButton
 				type="submit"
 				color="primary"
-				disabled={isLoading || !value}
-				sx={{ mr: 2, width: 40, height: 40, position: "relative" }}>
+				disabled={isLoading || !(propValue && propValue.length > 0)}
+				sx={{ width: 40, height: 40, position: "relative" }}>
 				<Fade in={isLoading} timeout={250} unmountOnExit>
 					<Box
 						sx={{
