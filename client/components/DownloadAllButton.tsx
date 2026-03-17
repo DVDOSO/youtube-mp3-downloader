@@ -12,6 +12,7 @@ import {
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { green, red } from "@mui/material/colors";
+import { validateYouTubeUrl } from "@/lib/util";
 
 interface DownloadAllButtonProps {
 	urls: string[];
@@ -39,6 +40,17 @@ const DownloadAllButton = ({
 		setIsLoading(true);
 		setIsSubmitting(true);
 		const toSend = urls.map((s) => (s || "").trim()).filter(Boolean);
+
+		for (const url of toSend) {
+			if (!validateYouTubeUrl(url)) {
+				setErrorMessage(`Invalid URL: ${url}`);
+				setIsError(true);
+				setIsLoading(false);
+				setIsSubmitting(false);
+				return;
+			}
+		}
+
 		try {
 			await handleListDownload(toSend);
 			setIsSuccess(true);

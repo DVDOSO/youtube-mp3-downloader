@@ -14,6 +14,7 @@ import {
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DownloadIcon from "@mui/icons-material/Download";
+import { validateYouTubeUrl } from "@/lib/util";
 
 type UrlFieldProps = {
 	value?: string;
@@ -31,6 +32,14 @@ const UrlField = ({ onValueChange }: UrlFieldProps) => {
 		setIsLoading(true);
 		setIsError(false);
 		setIsSuccess(false);
+
+		if (!validateYouTubeUrl(formData.get("name") as string)) {
+			setErrorMessage("Please enter a valid YouTube URL.");
+			setIsError(true);
+			setIsLoading(false);
+			return;
+		}
+
 		try {
 			await handleDownload(formData);
 			setIsSuccess(true);
