@@ -24,8 +24,16 @@ The easiest way to run this project is using Docker Compose. This handles all sy
 
 2.  **Start the application:**
 
-    ```bash
+    Powershell:
+
+    ```powershell
     docker-compose up --build
+    ```
+
+    Bash/macOS/Linux:
+
+    ```bash
+    docker compose up --build
     ```
 
     _Note: The first build will take a few minutes as it downloads the base images and installs FFmpeg._
